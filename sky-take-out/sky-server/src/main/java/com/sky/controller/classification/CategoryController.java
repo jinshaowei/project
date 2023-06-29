@@ -45,6 +45,7 @@ public class CategoryController {
         log.info("分页查询：{}", category);
         PageResult pageResult = categoryService.page(category);
         return Result.success(pageResult);
+
     }
 
 
