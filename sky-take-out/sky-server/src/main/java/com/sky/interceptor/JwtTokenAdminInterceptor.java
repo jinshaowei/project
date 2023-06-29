@@ -50,7 +50,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             log.info("jwt校验:{}", token);
             //解析令牌得到一个Map类型
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
-            //通过键获取值，令牌的ID是int类型的，不能强制
+            //通过键获取值，令牌里面 的ID是int类型的，不能强制
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工id：", empId);
 
