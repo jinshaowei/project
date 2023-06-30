@@ -25,4 +25,9 @@ public interface CategoryService {
      * 删除分类
      * */
     void delete(Integer id);
+
+    /**
+    * 启用- 禁用
+    * */
+    void status(Integer status, Long id);
 }

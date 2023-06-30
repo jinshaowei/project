@@ -6,6 +6,7 @@ import com.sky.entity.Category;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface CategoryMapper {
      * */
     @Delete("delete from category where id = #{id}")
     void delete(Integer id);
+
+
+    @Update("update category set status = #{status} where id = #{id};")
+    void status(Category category);
 }

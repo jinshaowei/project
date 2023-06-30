@@ -55,11 +55,11 @@ public class CategoryServiceImpl implements CategoryService {
     public PageResult page(CategoryPageQueryDTO category) {
         //分页参数
         PageHelper.startPage(category.getPage(),category.getPageSize());
-
+        //查询结果封装成List对象
         List<Category> categoryList = categoryMapper.select(category);
-
+        //将集合转换成Page对象
         Page<Category> page = (Page<Category>) categoryList;
-
+        //调用Page对象中的Result方法返回一个list集合
         return new PageResult(page.getTotal(),page.getResult());
     }
 
@@ -69,5 +69,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Integer id) {
         categoryMapper.delete(id);
+    }
+
+    /**
+     * 启用 - 禁用
+     * */
+    @Override
+    public void status(Integer status, Long id) {
+        Category category = new Category();
+        category.setStatus(status);
+        category.setId(id);
+        category.setUpdateTime(LocalDateTime.now());
+        category.setUpdateUser(BaseContext.getCurrentId());
+        categoryMapper.status(category);
     }
 }

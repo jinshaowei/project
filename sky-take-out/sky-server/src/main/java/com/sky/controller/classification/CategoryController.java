@@ -39,6 +39,14 @@ public class CategoryController {
         return Result.success();
     }
 
+    @ApiOperation("启用-禁用分类")
+    @PostMapping("/status/{status}")
+    public Result status(@PathVariable Integer status, Long id){
+        log.info("启用-禁用：{}", status, id);
+        categoryService.status(status, id);
+       return Result.success();
+    }
+
     @ApiOperation("分页查询")
     @GetMapping("/page")
     public Result<PageResult> page(CategoryPageQueryDTO category){
