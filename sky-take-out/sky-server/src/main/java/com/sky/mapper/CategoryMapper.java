@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 
+import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import org.apache.ibatis.annotations.Delete;
@@ -21,8 +22,8 @@ public interface CategoryMapper {
     void inst(Category category);
 
 
-    /*
-    *
+    /**
+    *分页查询
     * */
     List<Category> select(CategoryPageQueryDTO category);
 
@@ -33,7 +34,15 @@ public interface CategoryMapper {
     @Delete("delete from category where id = #{id}")
     void delete(Integer id);
 
-
+    /**
+     * 启用 - 禁用分类
+     * */
     @Update("update category set status = #{status} where id = #{id};")
     void status(Category category);
+
+    /**
+     * 修改分类
+     * */
+    @Update("update category set name = #{name}, sort = #{sort}, type = #{type} where id = #{id};")
+    void update(Category category);
 }

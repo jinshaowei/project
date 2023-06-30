@@ -4,7 +4,6 @@ package com.sky.service;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
-import com.sky.entity.Employee;
 import com.sky.result.PageResult;
 import org.springframework.stereotype.Service;
 
@@ -30,4 +29,10 @@ public interface CategoryService {
     * 启用- 禁用
     * */
     void status(Integer status, Long id);
+
+
+    /**
+    * 修改分类
+    * */
+    void update(CategoryDTO categoryDTO);
 }
