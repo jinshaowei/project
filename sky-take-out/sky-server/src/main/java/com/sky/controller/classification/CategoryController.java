@@ -31,10 +31,10 @@ public class CategoryController {
        return Result.success();
     }
 
-    @ApiOperation("根据ID删除员工")
+    @ApiOperation("删除分类")
     @DeleteMapping()
     public Result delete(Integer id){
-        log.info("删除员工：{}", id);
+        log.info("删除分类：{}", id);
         categoryService.delete(id);
         return Result.success();
     }

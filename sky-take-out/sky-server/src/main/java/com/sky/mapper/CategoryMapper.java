@@ -20,8 +20,15 @@ public interface CategoryMapper {
     void inst(Category category);
 
 
+    /*
+    *
+    * */
     List<Category> select(CategoryPageQueryDTO category);
 
+
+    /**
+     * 删除分类
+     * */
     @Delete("delete from category where id = #{id}")
     void delete(Integer id);
 }

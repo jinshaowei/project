@@ -22,7 +22,7 @@ public interface CategoryService {
     PageResult page(CategoryPageQueryDTO category);
 
     /**
-     * 删除员工
+     * 删除分类
      * */
     void delete(Integer id);
 }
