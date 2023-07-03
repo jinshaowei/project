@@ -1,28 +1,24 @@
 package com.sky.config;
 
+import com.sky.properties.AliOssProperties;
+import com.sky.utils.AliOssUtil;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class CommonConfig {
-    @Bean
-    public Docket docket(){
-        ApiInfo apiInfo = new ApiInfoBuilder()
-                .title("苍穹外卖项目接口文档")
-                .version("2.0")
-                .description("苍穹外卖项目接口文档")
-                .build();
 
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo)
-                .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sky.controller"))
-                .paths(PathSelectors.any())
-                .build();
-        return docket;
+
+    // 声明AliOssUtil 的bean对象
+    // 可以将 AliOssUtil工具类 直接交给IOC容器管理，声明bean对象的好处是在包不同名下依然可以被扫描到
+    @Bean
+    @ConditionalOnMissingBean
+    public AliOssUtil aliOssUtil(AliOssProperties aliOssProperties){
+         return new AliOssUtil(aliOssProperties.getEndpoint(),
+                 aliOssProperties.getAccessKeyId(),
+                 aliOssProperties.getAccessKeySecret(),
+                 aliOssProperties.getBucketName());
     }
+
 }

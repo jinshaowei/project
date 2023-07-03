@@ -13,3 +13,9 @@ sky:
     database: 0
     password: 1234
 
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5tEurNXahGwZQ2bPZVcr
+    access-key-secret: hJvHWX6O6YFi5lvag8YcCKMPM68fFq
+    bucket-name: cangqip-sky
+
