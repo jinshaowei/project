@@ -3,6 +3,7 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
@@ -35,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setSort(categoryDTO.getSort());
 
         //菜品状态
-        category.setStatus(0);
+        category.setStatus(StatusConstant.DISABLE);
         //创建时间
         category.setCreateTime(LocalDateTime.now());
         //修改时间
@@ -98,5 +99,18 @@ public class CategoryServiceImpl implements CategoryService {
         category.setUpdateTime(LocalDateTime.now());
         category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category);
+    }
+
+    /**
+     * 根据id查询分类
+     * */
+
+    @Override
+    public List<Category> select(Integer type) {
+        Category category = new Category();
+        category.setType(type);
+        List<Category> list =  categoryMapper.selectId(category);
+        System.out.println(list);
+        return list;
     }
 }

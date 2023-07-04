@@ -7,6 +7,8 @@ import com.sky.entity.Category;
 import com.sky.result.PageResult;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CategoryService {
 
@@ -35,4 +37,9 @@ public interface CategoryService {
     * 修改分类
     * */
     void update(CategoryDTO categoryDTO);
+
+    /**
+     * 根据id查询分类
+     * */
+    List<Category> select(Integer type);
 }

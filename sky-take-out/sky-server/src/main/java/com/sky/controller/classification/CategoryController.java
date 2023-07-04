@@ -15,6 +15,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Api(tags = "分类管理")
 @RestController
@@ -64,9 +66,15 @@ public class CategoryController {
         PageResult pageResult = categoryService.page(category);
         return Result.success(pageResult);
 
+
     }
 
-
-
+    @ApiOperation("分类id查询")
+    @GetMapping("list")
+    public Result<List> select(Integer type){
+        log.info("根据分类id查询：{}", type);
+        List<Category> category = categoryService.select(type);
+        return Result.success(category);
+    }
 
 }

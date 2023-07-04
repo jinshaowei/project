@@ -4,10 +4,7 @@ package com.sky.mapper;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -45,4 +42,10 @@ public interface CategoryMapper {
      * */
     @Update("update category set name = #{name}, sort = #{sort}, type = #{type} where id = #{id};")
     void update(Category category);
+
+    /**
+     * 根据id查询菜品分类
+     * */
+    @Select("select * from category where type = #{type};")
+    List<Category> selectId(Category category);
 }

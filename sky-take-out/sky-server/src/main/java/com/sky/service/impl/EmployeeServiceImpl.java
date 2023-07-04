@@ -87,7 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         //调用工具类加密
         employee1.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         //设定用户账户状态
-        employee1.setStatus(1);
+        employee1.setStatus(StatusConstant.ENABLE);
         //创建时间
         employee1.setCreateTime(LocalDateTime.now());
         //修改时间
