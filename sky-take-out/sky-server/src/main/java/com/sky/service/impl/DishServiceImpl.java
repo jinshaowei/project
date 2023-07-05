@@ -1,20 +1,23 @@
 package com.sky.service.impl;
 
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.DishDTO;
-import com.sky.entity.Category;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
+import com.sky.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Service
@@ -42,10 +45,6 @@ public class DishServiceImpl implements DishService {
                 .image(dto.getImage())
                 .description(dto.getDescription())
                 .status(StatusConstant.DISABLE)
-//                .createTime(LocalDateTime.now())
-//                .updateTime(LocalDateTime.now())
-//                .createUser(BaseContext.getCurrentId())
-//                .updateUser(BaseContext.getCurrentId())
                 .build();
 
         //返回携带了菜品id
@@ -62,6 +61,24 @@ public class DishServiceImpl implements DishService {
         //再根据id插入到口味表
         dishFlavorMapper.insertBatch(flavors);
 
+    }
+
+    /**
+     * 分页查询
+     * */
+    @Override
+    public PageResult select(DishPageQueryDTO pageQueryDTO) {
+        //获取总记录数和起始索引
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+
+        //查询结果封装
+        List<DishVO> list = dishMapper.select(pageQueryDTO);
+
+        //转成page
+        Page<DishVO> page = (Page<DishVO>) list;
+
+        //返回结果
+        return new PageResult(page.getTotal(), page.getResult());
     }
 
 }

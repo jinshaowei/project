@@ -3,11 +3,15 @@ package com.sky.mapper;
 
 
 import com.sky.annotation.AutoFill;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.entity.Dish;
 
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishVO;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface DishMapper {
@@ -19,4 +23,8 @@ public interface DishMapper {
             "VALUES (#{name},#{categoryId},#{price},#{image},#{description},#{createTime},#{updateTime},#{createUser},#{updateUser});")
     void inst(Dish dish);
 
+    /*
+    * 分页查询
+    * */
+    List<DishVO> select(DishPageQueryDTO pageQueryDTO);
 }
