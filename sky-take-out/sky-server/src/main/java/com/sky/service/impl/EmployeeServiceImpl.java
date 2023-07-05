@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
-import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
@@ -19,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -89,14 +86,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         //设定用户账户状态
         employee1.setStatus(StatusConstant.ENABLE);
         //创建时间
-        employee1.setCreateTime(LocalDateTime.now());
-        //修改时间
-        employee1.setUpdateTime(LocalDateTime.now());
-        //当前线程登录的用户ID
-        employee1.setCreateUser(BaseContext.getCurrentId());
-        employee1.setUpdateUser(BaseContext.getCurrentId());
+//        employee1.setCreateTime(LocalDateTime.now());
+//        //修改时间
+//        employee1.setUpdateTime(LocalDateTime.now());
+//        //当前线程登录的用户ID
+//        employee1.setCreateUser(BaseContext.getCurrentId());
+//        employee1.setUpdateUser(BaseContext.getCurrentId());
 
         employeeMapper.getStaff(employee1);
+        System.out.println(employee1);
     }
 
 
@@ -110,7 +108,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         //根据员工姓名查询的结果封装到List集合
         List<Employee> employeelist = employeeMapper.list(pageQueryDTO.getName());
-        System.out.println(employeelist);
 
         //封装结果
         Page<Employee> page =(Page<Employee>) employeelist;
@@ -130,8 +127,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = Employee.builder()
                 .id(id)
                 .status(status)
-                .updateTime(LocalDateTime.now())
-                .updateUser(BaseContext.getCurrentId())
+//                .updateTime(LocalDateTime.now())
+//                .updateUser(BaseContext.getCurrentId())
                 .build();
 
         employeeMapper.update(employee);
@@ -155,9 +152,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void update(Employee employee) {
         //修改时间
-        employee.setUpdateTime(LocalDateTime.now());
-        //修改人id
-        employee.setUpdateUser(BaseContext.getCurrentId());
+//        employee.setUpdateTime(LocalDateTime.now());
+//        //修改人id
+//        employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
     }
 

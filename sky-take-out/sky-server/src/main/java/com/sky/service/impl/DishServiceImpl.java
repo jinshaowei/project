@@ -42,10 +42,10 @@ public class DishServiceImpl implements DishService {
                 .image(dto.getImage())
                 .description(dto.getDescription())
                 .status(StatusConstant.DISABLE)
-                .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now())
-                .createUser(BaseContext.getCurrentId())
-                .updateUser(BaseContext.getCurrentId())
+//                .createTime(LocalDateTime.now())
+//                .updateTime(LocalDateTime.now())
+//                .createUser(BaseContext.getCurrentId())
+//                .updateUser(BaseContext.getCurrentId())
                 .build();
 
         //返回携带了菜品id
@@ -59,7 +59,6 @@ public class DishServiceImpl implements DishService {
             dishFlavor1.setDishId(dish.getId());
         });
 
-        System.out.println(flavors);
         //再根据id插入到口味表
         dishFlavorMapper.insertBatch(flavors);
 

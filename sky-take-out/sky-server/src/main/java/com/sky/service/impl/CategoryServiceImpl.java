@@ -38,13 +38,13 @@ public class CategoryServiceImpl implements CategoryService {
         //菜品状态
         category.setStatus(StatusConstant.DISABLE);
         //创建时间
-        category.setCreateTime(LocalDateTime.now());
-        //修改时间
-        category.setUpdateTime(LocalDateTime.now());
-        //创建人ID
-        category.setCreateUser(BaseContext.getCurrentId());
-        //修改人ID
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setCreateTime(LocalDateTime.now());
+//        //修改时间
+//        category.setUpdateTime(LocalDateTime.now());
+//        //创建人ID
+//        category.setCreateUser(BaseContext.getCurrentId());
+//        //修改人ID
+//        category.setUpdateUser(BaseContext.getCurrentId());
 
         categoryMapper.inst(category);
     }
@@ -96,8 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
         category.setType(categoryDTO.getType());
         category.setName(categoryDTO.getName());
         category.setSort(categoryDTO.getSort());
-        category.setUpdateTime(LocalDateTime.now());
-        category.setUpdateUser(BaseContext.getCurrentId());
+//        category.setUpdateTime(LocalDateTime.now());
+//        category.setUpdateUser(BaseContext.getCurrentId());
         categoryMapper.update(category);
     }
 
@@ -110,7 +110,6 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
         category.setType(type);
         List<Category> list =  categoryMapper.selectId(category);
-        System.out.println(list);
         return list;
     }
 }
