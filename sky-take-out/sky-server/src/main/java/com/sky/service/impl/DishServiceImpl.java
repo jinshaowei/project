@@ -3,32 +3,43 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.BaseException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetMealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class DishServiceImpl implements DishService {
 
+    //菜品表
     @Autowired
     private DishMapper dishMapper;
 
     //口味表
     @Autowired
     private DishFlavorMapper dishFlavorMapper;
+
+    //菜品套餐关系表
+    @Autowired
+    private SetMealDishMapper setMealDishMapper;
 
     /**
      * 新增菜品
@@ -79,6 +90,38 @@ public class DishServiceImpl implements DishService {
 
         //返回结果
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+
+    /**
+     * 删除菜品
+     * */
+    @Transactional     //出现运行时异常进行回滚事务
+    @Override
+    public void delete(List<Long> ids) {
+        // 判断菜品是否是起售
+        //查询统计起售菜品的数量
+        Long count = dishMapper.countDishByIds(ids);
+        //大于0表示有起售菜品
+        if (count > 0){
+
+            throw new BaseException(MessageConstant.DISH_ON_SALE);
+        }
+
+        //判断菜品是否关联套餐
+        //查询菜品套餐表的菜品id是否有关联套餐的id
+        List<Long> countIds =  setMealDishMapper.countSetmealIdsByDishIds(ids);
+        //判断集合是否为空， 有则不为空
+        if (!CollectionUtils.isEmpty(countIds)){
+            throw new BaseException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
+        }
+
+        //删除菜品 及 口味信息
+        dishMapper.deleteDishIds(ids);
+
+        dishFlavorMapper.deleteByIds(ids);
+
+
     }
 
 }

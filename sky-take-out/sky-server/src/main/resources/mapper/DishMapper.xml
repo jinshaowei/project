@@ -5,6 +5,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--配置mybatis 关联mapper接口-->
 <mapper namespace="com.sky.mapper.DishMapper">
+    <!--根据id删除菜品信息-->
+    <delete id="deleteDishIds">
+        delete from dish where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+          #{id}
+        </foreach>
+    </delete>
     <!--分页查询菜品-->
     <select id="select" resultType="com.sky.vo.DishVO">
         select d.*, c.name 'categoryName' from dish d left join category c on d.category_id = c.id
@@ -21,5 +28,17 @@
 
         </where>
         order by d.create_time desc
+    </select>
+
+    <!--查询统计起售的菜品数量-->
+    <select id="countDishByIds" resultType="java.lang.Long">
+        select count(*) from dish
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        and status = 1
+
+
     </select>
 </mapper>

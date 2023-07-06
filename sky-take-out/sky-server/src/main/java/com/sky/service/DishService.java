@@ -26,4 +26,9 @@ public interface DishService {
      * */
     PageResult select(DishPageQueryDTO pageQueryDTO);
 
+
+    /**
+     * 删除菜品
+     * */
+    void delete(List<Long> ids);
 }

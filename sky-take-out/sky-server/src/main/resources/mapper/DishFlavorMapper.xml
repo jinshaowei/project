@@ -9,10 +9,18 @@
     <insert id="insertBatch">
         insert into dish_flavor (dish_id, name, value) VALUES
         <foreach collection="flavors" item="flavor" separator=",">
-        (#{flavor.dishId},#{flavor.name},#{flavor.value})
+            (#{flavor.dishId},#{flavor.name},#{flavor.value})
         </foreach>
 
     </insert>
+
+    <!--批量删除菜品口味信息-->
+    <delete id="deleteByIds">
+        delete from dish_flavor where dish_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
 
 </mapper>

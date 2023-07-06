@@ -13,5 +13,8 @@ public interface DishFlavorMapper {
     void insertBatch(List<DishFlavor> flavors);
 
 
-
+    /*
+    * 批量删除菜品口味信息
+    * */
+    void deleteByIds(List<Long> ids);
 }
