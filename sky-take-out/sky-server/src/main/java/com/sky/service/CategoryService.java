@@ -38,8 +38,10 @@ public interface CategoryService {
     * */
     void update(CategoryDTO categoryDTO);
 
+
     /**
      * 根据id查询分类
      * */
     List<Category> select(Integer type);
+
 }

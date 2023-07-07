@@ -11,12 +11,14 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.BaseException;
+import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,10 @@ public class DishServiceImpl implements DishService {
     //菜品套餐关系表
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+
+    //分类表
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     /**
      * 新增菜品
@@ -122,6 +128,47 @@ public class DishServiceImpl implements DishService {
         dishFlavorMapper.deleteByIds(ids);
 
 
+    }
+
+    /**
+    * 查询数据回显
+    * */
+    @Override
+    public DishVO selectId(Long id) {
+
+        //根据id查询数据
+        DishVO voList = dishMapper.selectId(id);
+        //根据菜品id查询口味信息
+        List<DishFlavor> list = dishFlavorMapper.select(id);
+        //口味信息存入实体类中
+        voList.setFlavors(list);
+        return voList;
+    }
+
+    /**
+     * 修改菜品数据
+     * */
+    @Transactional
+    @Override
+    public void update(DishVO dishVO) {
+        //修改的菜品信息
+        Dish dish = new Dish();
+        //拷贝对象
+        BeanUtils.copyProperties(dishVO,dish);
+
+        //修改菜品基本信息
+        dishMapper.update(dish);
+
+        //先删除口味信息，再添加
+        dishFlavorMapper.deleteByIds(Collections.singletonList(dish.getId()));
+
+        //遍历口味列表，添加菜品id，再通过id进行添加口味信息
+        List<DishFlavor> flavors = dishVO.getFlavors();
+        flavors.forEach(dishFlavor -> {
+            dishFlavor.setDishId(dish.getId());
+        });
+        //添加口味信息
+        dishFlavorMapper.insertBatch(flavors);
     }
 
 }

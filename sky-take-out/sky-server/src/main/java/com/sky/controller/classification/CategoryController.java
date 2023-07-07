@@ -69,7 +69,7 @@ public class CategoryController {
 
     @ApiOperation("分类id查询")
     @GetMapping("list")
-    public Result<List> select(Integer type){
+    public Result<List<Category>> select(Integer type){
         log.info("根据分类id查询：{}", type);
         List<Category> category = categoryService.select(type);
         return Result.success(category);

@@ -11,6 +11,16 @@
         VALUES (#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
 
+    <!--根据分类名称修改-->
+    <update id="updateName">
+        update category
+        set
+            <if test="categoryByName != null">
+                name = #{categoryByName}
+            </if>
+        where name = #{categoryName};
+    </update>
+
     <!--动态查询-->
     <select id="select" resultType="com.sky.entity.Category">
         select *
@@ -20,7 +30,7 @@
                 name = #{name}
             </if>
             <if test="type != null">
-               and type = #{type}
+                and type = #{type}
             </if>
         </where>
         order by sort asc

@@ -51,9 +51,22 @@ public interface CategoryMapper {
     @Update("update category set name = #{name}, sort = #{sort}, type = #{type} where id = #{id};")
     void update(Category category);
 
+
     /**
      * 根据id查询菜品分类
      * */
     @Select("select * from category where type = #{type};")
     List<Category> selectId(Category category);
+
+    /**
+     * 根据菜品id修改分类名称
+     * */
+    @Update("update category set name = #{categoryName} where name = #{DishId};")
+    void updateDishId(String categoryName,Long DishId);
+
+    /**
+     * 根据分类名称修改
+     * */
+//    @Update("update category set name = #{categoryByName} where name = #{categoryName};")
+    void updateName(String categoryByName, String categoryName);
 }

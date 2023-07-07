@@ -101,15 +101,17 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.update(category);
     }
 
+
     /**
      * 根据id查询分类
      * */
-
     @Override
     public List<Category> select(Integer type) {
         Category category = new Category();
         category.setType(type);
-        List<Category> list =  categoryMapper.selectId(category);
+        List<Category> list = categoryMapper.selectId(category);
         return list;
     }
+
+
 }
