@@ -3,6 +3,7 @@ package com.sky.controller.alioss;
 import com.sky.result.Result;
 import com.sky.utils.AliOssUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ public class CommonController {
     @Autowired
     private AliOssUtil aliOssUtil;
 
+    @ApiOperation("上传图片")
     @PostMapping("/upload")
     public Result upload(MultipartFile file) throws IOException {
         //获取文件原始名

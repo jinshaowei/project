@@ -10,8 +10,8 @@ sky:
   redis:
     host: 127.0.0.1
     port: 6379
-    database: 0
-    password: 1234
+    database: 10
+    password: 123456
 
   alioss:
     endpoint: oss-cn-hangzhou.aliyuncs.com

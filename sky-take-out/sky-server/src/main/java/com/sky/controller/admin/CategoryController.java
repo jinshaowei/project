@@ -1,4 +1,4 @@
-package com.sky.controller.classification;
+package com.sky.controller.admin;
 
 
 import com.sky.dto.CategoryDTO;
