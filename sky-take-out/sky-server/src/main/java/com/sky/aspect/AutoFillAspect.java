@@ -96,9 +96,10 @@ public class AutoFillAspect {
      *   方法二：  快速获取方法上的注解
      * */
 
+
     //将AutoFill注解只限制在mapper层增强  （拦截的是mapper接口下的autoFill注解）
     @Before(" execution(* com.sky.mapper.*.*(..)) && @annotation(autoFill)")
-    /** 注意：相对于方法一的获取AutoFill注解，可以在方法参数中指定注解  将切入点表达式的全类名改成注解的形参 （相对于已经指定注解的类型）*/
+    /** 注意：相对于方法一的获取AutoFill注解，可以在此方法参数中指定注解  将切入点表达式的全类名改成注解的形参 （相对于已经指定注解的类型）*/
     public void autoFillProperty(JoinPoint joinPoint, AutoFill autoFill) throws Exception {
 
 
@@ -138,5 +139,11 @@ public class AutoFillAspect {
         setUpdateUser.invoke(args, BaseContext.getCurrentId());
 
     }
+
+
+    public void autoFillProperty(){
+
+    }
+
 
 }

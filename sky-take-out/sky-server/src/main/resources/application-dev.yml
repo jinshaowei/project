@@ -19,3 +19,6 @@ sky:
     access-key-secret: hJvHWX6O6YFi5lvag8YcCKMPM68fFq
     bucket-name: cangqip-sky
 
+  wechat:
+    appid: wx77e3e9b5d2d30681
+    secret: db0bb93cc5c77d7bef2c46eb7ed657cc
