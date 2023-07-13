@@ -3,23 +3,22 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.BaseException;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.SetMealService;
-import com.sky.vo.SetmealOverViewVO;
-import io.swagger.annotations.ApiOperation;
+import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -37,6 +36,7 @@ public class SetMealServiceImpl implements SetMealService{
      * 新增套餐
      * @param setmealDTO
      */
+    @Transactional
     @Override
     public void insertSetMeal(SetmealDTO setmealDTO) {
         Setmeal setmeal = new Setmeal();
@@ -74,12 +74,50 @@ public class SetMealServiceImpl implements SetMealService{
         PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
         //将结果存储到list中
         List<Setmeal> setmealList = setMealMapper.selectSetmealPage(setmealPageQueryDTO);
-        System.out.println(setmealList);
 
         //封装查询结果
         Page<Setmeal> page = (Page<Setmeal>) setmealList;
 
         return new PageResult(page.getTotal(),page.getResult());
+    }
+
+    /**
+     * 套餐起售-停售
+     * @param status
+     */
+    @Override
+    public void updataStatusById(Integer status, Long id) {
+        setMealMapper.updateStatusByIds(status,id);
+    }
+
+    /**
+     * 批量输出套餐
+     * @param ids
+     */
+    @Transactional
+    @Override
+    public void deleteByIds(List<Long> ids) {
+        //统计出起售套餐
+        Long count = setMealMapper.selectByIds(ids);
+        //判断是否有起售套餐
+        if (count != 0){
+            throw new BaseException(MessageConstant.DISH_ON_SALE);
+        }
+        //批量删除套餐
+        setMealMapper.deleteByIds(ids);
+    }
+
+    /**
+     * 根据id查询套餐和菜品回显
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealVO selectSetMalByIds(Long id) {
+        SetmealVO setmealVO = setMealMapper.selectById(id);
+        Long ids = setmealVO.getId();
+        setmealVO.setSetmealDishes(setMealDishMapper.selectSetMealDish(ids));
+        return setmealVO;
     }
 
 }

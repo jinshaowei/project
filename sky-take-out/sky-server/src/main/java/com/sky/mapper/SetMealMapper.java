@@ -1,13 +1,11 @@
 package com.sky.mapper;
 
 import com.sky.annotation.AutoFill;
-import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -31,4 +29,32 @@ public interface SetMealMapper {
      * @return
      */
     List<Setmeal> selectSetmealPage(SetmealPageQueryDTO setmealPageQueryDTO);
+
+    @Update("update setmeal set status = #{status} where id = #{id}; ")
+    void updateStatusByIds(Integer status, Long id);
+
+    /**
+     * 查询起售中的套餐
+     * @param ids
+     * @return
+     */
+    Long selectByIds(List<Long> ids);
+
+
+    /**
+     * 根据id批量删除套餐
+     * @param ids
+     */
+    void deleteByIds(List<Long> ids);
+
+
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    @Options(useGeneratedKeys = true,keyProperty = "id")
+    @Select("select * from setmeal where id = #{id}")
+    SetmealVO selectById(Long id);
 }
