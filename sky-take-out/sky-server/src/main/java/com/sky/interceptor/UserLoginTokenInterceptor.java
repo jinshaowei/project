@@ -41,7 +41,7 @@ public class UserLoginTokenInterceptor implements HandlerInterceptor {
             //当前拦截到的不是动态方法，直接放行
             return true;
         }
-        log.info("拦截了请求：{}", request.getRequestURI().toString());
+        log.info("拦截到了请求：{}", request.getRequestURI().toString());
 
         //1、从请求头中获取令牌
         String token = request.getHeader(jwtProperties.getUserTokenName());
