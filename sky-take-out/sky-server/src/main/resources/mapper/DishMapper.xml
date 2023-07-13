@@ -71,4 +71,18 @@
 
 
     </select>
+    <select id="selectCategoryDishByIds" resultType="com.sky.entity.Dish">
+        select *
+        from dish
+        <where>
+            <if test="categoryId != null">
+                category_id = #{categoryId}
+            </if>
+            <if test="name != null and name != ''">
+                and name like concat('%',#{name},'%');
+            </if>
+        </where>
+
+
+    </select>
 </mapper>
