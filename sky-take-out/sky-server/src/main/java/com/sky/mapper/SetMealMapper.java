@@ -25,6 +25,7 @@ public interface SetMealMapper {
 
     /**
      * 套餐分页查询
+     *
      * @param setmealPageQueryDTO
      * @return
      */
@@ -35,6 +36,7 @@ public interface SetMealMapper {
 
     /**
      * 查询起售中的套餐
+     *
      * @param ids
      * @return
      */
@@ -43,18 +45,27 @@ public interface SetMealMapper {
 
     /**
      * 根据id批量删除套餐
+     *
      * @param ids
      */
     void deleteByIds(List<Long> ids);
 
 
-
     /**
      * 根据id查询套餐
+     *
      * @param id
      * @return
      */
-    @Options(useGeneratedKeys = true,keyProperty = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     @Select("select * from setmeal where id = #{id}")
     SetmealVO selectById(Long id);
+
+    /**
+     * 修改套餐
+     * @param setmeal
+     */
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @AutoFill(OperationType.UPDATE)
+    void updateSetMeal(Setmeal setmeal);
 }

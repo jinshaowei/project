@@ -15,6 +15,7 @@ import com.sky.result.PageResult;
 import com.sky.service.SetMealService;
 import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,10 +115,41 @@ public class SetMealServiceImpl implements SetMealService{
      */
     @Override
     public SetmealVO selectSetMalByIds(Long id) {
+        //根据id查询返回结果
         SetmealVO setmealVO = setMealMapper.selectById(id);
+        //获取返回的主键id
         Long ids = setmealVO.getId();
+        //根据主键id查询套餐菜品关系表
         setmealVO.setSetmealDishes(setMealDishMapper.selectSetMealDish(ids));
         return setmealVO;
+    }
+
+    /**
+     * 修改数据
+     * @param setmealVO
+     * @return
+     */
+    @Transactional
+    @Override
+    public void updateSetMeal(SetmealVO setmealVO) {
+        Setmeal setmeal = new Setmeal();
+
+        BeanUtils.copyProperties(setmealVO,setmeal);
+
+        //修改套餐表数据
+        setMealMapper.updateSetMeal(setmeal);
+        System.out.println(setmeal);
+
+        //根据主键套餐id删除关联的菜品
+        setMealDishMapper.deleteSetMealDishById(setmeal.getId());
+
+        //再添加菜品
+        List<SetmealDish> setmealDishes = setmealVO.getSetmealDishes();
+        setmealDishes.forEach(setmealDish -> {
+           setmealDish.setSetmealId(setmeal.getId());
+        });
+        setMealDishMapper.insertSetmealDishById(setmealDishes);
+
     }
 
 }

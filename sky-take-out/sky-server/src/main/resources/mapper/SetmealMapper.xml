@@ -4,6 +4,34 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sky.mapper.SetMealMapper">
+    <!--修改套餐-->
+    <update id="updateSetMeal">
+        update setmeal
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
     <!--根据id批量删除套餐-->
     <delete id="deleteByIds">
         delete from setmeal where id in
@@ -13,6 +41,7 @@
     </delete>
 
 
+    <!--分页查询-->
     <select id="selectSetmealPage" resultType="com.sky.entity.Setmeal">
         select *
         from setmeal
@@ -27,7 +56,7 @@
                 and status = #{status}
             </if>
         </where>
-
+        order by update_time desc
     </select>
 
     <!--根据id统计起售套餐数量-->
@@ -38,6 +67,5 @@
         </foreach>
         and status = 1
     </select>
-
 
 </mapper>

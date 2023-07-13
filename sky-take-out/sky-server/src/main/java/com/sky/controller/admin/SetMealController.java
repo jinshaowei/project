@@ -2,7 +2,6 @@ package com.sky.controller.admin;
 
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
-import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetMealService;
@@ -61,6 +60,14 @@ public class SetMealController {
         log.info("根据id查询套餐：{}", id);
         SetmealVO setmealVO = setMealService.selectSetMalByIds(id);
         return Result.success(setmealVO);
+    }
+
+    @ApiOperation("修改套餐")
+    @PutMapping
+    public Result updateSetMeal(@RequestBody SetmealVO setmealVO){
+        log.info("修改套餐：{}" ,setmealVO);
+          setMealService.updateSetMeal(setmealVO);
+        return Result.success();
     }
 
 }

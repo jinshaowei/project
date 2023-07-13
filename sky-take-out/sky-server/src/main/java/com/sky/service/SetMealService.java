@@ -43,4 +43,11 @@ public interface SetMealService {
      * @return
      */
     SetmealVO selectSetMalByIds(Long id);
+
+    /**
+     * 修改数据
+     * @param setmealVO
+     * @return
+     */
+    void updateSetMeal(SetmealVO setmealVO);
 }
