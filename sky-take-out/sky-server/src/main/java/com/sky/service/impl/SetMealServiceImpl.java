@@ -19,6 +19,7 @@ import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,7 @@ public class SetMealServiceImpl implements SetMealService{
      * 新增套餐
      * @param setmealDTO
      */
+    @CacheEvict(cacheNames = "setmeal_cache", key = "#a0.categoryId")
     @Transactional
     @Override
     public void insertSetMeal(SetmealDTO setmealDTO) {
@@ -70,8 +72,7 @@ public class SetMealServiceImpl implements SetMealService{
             setmealDish.setSetmealId(setmeal.getId());
             setMealDishMapper.insertSetmealDish(setmealDish);
         });
-        //清除套餐缓存
-        eliminateCache("*");
+
 
     }
 
@@ -80,6 +81,7 @@ public class SetMealServiceImpl implements SetMealService{
      * @param setmealPageQueryDTO
      * @return
      */
+
     @Override
     public PageResult selectPageSetmeal(SetmealPageQueryDTO setmealPageQueryDTO) {
         //获取总记录数，和当前页码
@@ -97,6 +99,7 @@ public class SetMealServiceImpl implements SetMealService{
      * 套餐起售-停售
      * @param status
      */
+    @CacheEvict(cacheNames = "setmeal_cache", allEntries = true)
     @Transactional
     @Override
     public void updateStatusById(Integer status, Long id) {
@@ -110,14 +113,14 @@ public class SetMealServiceImpl implements SetMealService{
         }
         setMealMapper.updateStatusByIds(status,id);
 
-        //清除套餐缓存
-        eliminateCache("*");
+
     }
 
     /**
      * 批量删除套餐
      * @param ids
      */
+    @CacheEvict(cacheNames = "setmeal_cache", allEntries = true)
     @Transactional
     @Override
     public void deleteByIds(List<Long> ids) {
@@ -130,8 +133,7 @@ public class SetMealServiceImpl implements SetMealService{
         //批量删除套餐
         setMealMapper.deleteByIds(ids);
 
-        //清除套餐缓存
-        eliminateCache("*");
+
 
     }
 
@@ -157,6 +159,7 @@ public class SetMealServiceImpl implements SetMealService{
      * @param setmealVO
      * @return
      */
+    @CacheEvict(cacheNames = "setmeal_cache", allEntries = true)
     @Transactional
     @Override
     public void updateSetMeal(SetmealVO setmealVO) {
@@ -178,17 +181,16 @@ public class SetMealServiceImpl implements SetMealService{
         });
         setMealDishMapper.insertSetmealDishById(setmealDishes);
 
-        //清除套餐缓存
-        eliminateCache("*");
+
     }
 
-    //清除缓存方法
-    private void eliminateCache(String cache) {
-        log.info("清除套餐缓存...");
-        Set keys = redisTemplate.keys("setmeal:" + cache);
-
-        redisTemplate.delete(keys);
-    }
+//    //清除缓存方法
+//    private void eliminateCache(String cache) {
+//        log.info("清除套餐缓存...");
+//        Set keys = redisTemplate.keys("setmeal:" + cache);
+//
+//        redisTemplate.delete(keys);
+//    }
 
 
 }

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class SetMealController {
     @Autowired
     private UserSetMealService userSetMealService;
 
+    @CachePut(cacheNames = "setmeal_cache", key = "#a0")
     @ApiOperation("根据分类id查询套餐")
     @GetMapping("/list")
     public Result<List> selectSetMealById(Long categoryId){
@@ -32,6 +34,7 @@ public class SetMealController {
         return Result.success(SetMealList);
     }
 
+    @CachePut(cacheNames = "setmeal_cache", key = "#a0")
     @ApiOperation("根据套餐id查询包含的菜品")
     @Qualifier
     @GetMapping("dish/{id}")
