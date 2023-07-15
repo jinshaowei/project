@@ -87,10 +87,10 @@ public class SetMealServiceImpl implements SetMealService{
         //获取总记录数，和当前页码
         PageHelper.startPage(setmealPageQueryDTO.getPage(),setmealPageQueryDTO.getPageSize());
         //将结果存储到list中
-        List<Setmeal> setmealList = setMealMapper.selectSetmealPage(setmealPageQueryDTO);
+        List<SetmealVO> setmealList = setMealMapper.selectSetmealPage(setmealPageQueryDTO);
 
         //封装查询结果
-        Page<Setmeal> page = (Page<Setmeal>) setmealList;
+        Page<SetmealVO> page = (Page<SetmealVO>) setmealList;
 
         return new PageResult(page.getTotal(),page.getResult());
     }

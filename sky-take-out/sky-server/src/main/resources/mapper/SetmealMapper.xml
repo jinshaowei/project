@@ -35,9 +35,9 @@
     <!--根据id修改套餐-->
     <update id="updateSetMealByids">
         update setmeal set status = 0 where id in
-<foreach collection="setMealById" item="id" separator="," open="(" close=")">
-    #{id}
-</foreach>
+        <foreach collection="setMealById" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
     </update>
     <!--根据id批量删除套餐-->
     <delete id="deleteByIds">
@@ -49,21 +49,20 @@
 
 
     <!--分页查询-->
-    <select id="selectSetmealPage" resultType="com.sky.entity.Setmeal">
-        select *
-        from setmeal
+    <select id="selectSetmealPage" resultType="com.sky.vo.SetmealVO">
+        select s.*, c.name 'categoryName' from setmeal s left join category c on s.category_id = c.id
         <where>
             <if test="categoryId != null">
-                category_id = #{categoryId}
+                and s.category_id = #{categoryId}
             </if>
             <if test="name != null and name != ''">
                 and name like concat('%', #{name}, '%')
             </if>
             <if test="status != null">
-                and status = #{status}
+                and s.status = #{status}
             </if>
         </where>
-        order by update_time desc
+        order by s.update_time desc
     </select>
 
     <!--根据id统计起售套餐数量-->

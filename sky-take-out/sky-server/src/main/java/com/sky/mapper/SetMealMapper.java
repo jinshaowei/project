@@ -29,7 +29,7 @@ public interface SetMealMapper {
      * @param setmealPageQueryDTO
      * @return
      */
-    List<Setmeal> selectSetmealPage(SetmealPageQueryDTO setmealPageQueryDTO);
+    List<SetmealVO> selectSetmealPage(SetmealPageQueryDTO setmealPageQueryDTO);
 
     @Update("update setmeal set status = #{status} where id = #{id}; ")
     void updateStatusByIds(Integer status, Long id);
