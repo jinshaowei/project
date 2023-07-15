@@ -4,6 +4,7 @@ package com.sky.service;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Category;
+import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
 import org.springframework.stereotype.Service;
@@ -54,4 +55,6 @@ public interface DishService {
      * @param id
      */
     void updeteByIds(Integer status, Long id);
+
+
 }

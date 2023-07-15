@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.sky.entity.Dish;
 import com.sky.vo.DishVO;
 import org.springframework.stereotype.Service;
 
@@ -13,5 +14,5 @@ public interface UserDishService {
      * @param categoryId
      * @return
      */
-    List DishById(Long categoryId);
+    List<DishVO> listWithFlavor(Dish dish);
 }
