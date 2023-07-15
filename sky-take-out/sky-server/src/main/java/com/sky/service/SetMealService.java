@@ -29,7 +29,7 @@ public interface SetMealService {
      * 套餐起售-停售
      * @param status
      */
-    void updataStatusById(Integer status, Long id);
+    void updateStatusById(Integer status, Long id);
 
     /**
      * 批量输出套餐

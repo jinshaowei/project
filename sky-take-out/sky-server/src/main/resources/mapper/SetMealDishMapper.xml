@@ -6,11 +6,11 @@
 <!--配置mybatis 关联mapper接口-->
 <mapper namespace="com.sky.mapper.SetMealDishMapper">
 
-        <insert id="insertSetmealDishById">
+    <insert id="insertSetmealDishById">
         insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES
-          <foreach collection="setmealDishes" item="sds" separator=",">
-              (#{sds.setmealId}, #{sds.dishId}, #{sds.name}, #{sds.price}, #{sds.copies})
-          </foreach>
+        <foreach collection="setmealDishes" item="sds" separator=",">
+            (#{sds.setmealId}, #{sds.dishId}, #{sds.name}, #{sds.price}, #{sds.copies})
+        </foreach>
 
     </insert>
 
@@ -23,4 +23,6 @@
             #{id}
         </foreach>
     </select>
+
+
 </mapper>

@@ -32,6 +32,13 @@
         </set>
         where id = #{id}
     </update>
+    <!--根据id修改套餐-->
+    <update id="updateSetMealByids">
+        update setmeal set status = 0 where id in
+<foreach collection="setMealById" item="id" separator="," open="(" close=")">
+    #{id}
+</foreach>
+    </update>
     <!--根据id批量删除套餐-->
     <delete id="deleteByIds">
         delete from setmeal where id in

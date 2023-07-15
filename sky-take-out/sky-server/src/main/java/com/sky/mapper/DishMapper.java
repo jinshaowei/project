@@ -29,7 +29,6 @@ public interface DishMapper {
     /*
     * 查询统计起售的菜品
     * */
-
     Long countDishByIds(List<Long> ids);
 
     /*
@@ -50,6 +49,27 @@ public interface DishMapper {
     @AutoFill(OperationType.UPDATE)
     void update(Dish dish);
 
-//    @Select("select * from dish where category_id = #{categoryId};")
+    /**
+     * 查询套餐中菜品的名字
+     * @param categoryId
+     * @param name
+     * @return
+     */
     List<Dish> selectCategoryDishByIds(Long categoryId, String name);
+
+    /**
+     * 根据菜品id修改状态
+     * @param status
+     * @param id
+     */
+
+    @Update("update dish set  status = #{status} where id = #{id}")
+    void updateByIds(Integer status, Long id);
+
+    /**
+     * 根据菜品id查询菜品状态
+     * @param dishIds
+     * @return
+     */
+    List<Dish> selectSetMealDishByIds(List<Long> dishIds);
 }

@@ -71,6 +71,7 @@
 
 
     </select>
+    <!--查询套餐中菜品名字-->
     <select id="selectCategoryDishByIds" resultType="com.sky.entity.Dish">
         select *
         from dish
@@ -84,5 +85,12 @@
         </where>
 
 
+    </select>
+    <!--根据菜品id查询菜品状态-->
+    <select id="selectSetMealDishByIds" resultType="com.sky.entity.Dish">
+        select * from dish where status = 0 and id in
+        <foreach collection="dishIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
     </select>
 </mapper>

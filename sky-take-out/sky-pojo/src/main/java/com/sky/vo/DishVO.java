@@ -39,5 +39,6 @@ public class DishVO implements Serializable {
     //菜品关联的口味
     private List<DishFlavor> flavors = new ArrayList<>();
 
+    //关联套餐菜品表份数
     private Integer copies;
 }

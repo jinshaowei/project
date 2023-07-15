@@ -1,10 +1,8 @@
 package com.sky.controller.user;
 
-
-import com.sky.entity.Dish;
 import com.sky.result.Result;
 import com.sky.service.UserDishService;
-import com.sky.service.UserService;
+import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

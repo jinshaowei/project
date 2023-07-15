@@ -29,11 +29,5 @@ public interface DishFlavorMapper {
     @Select("select * from dish_flavor df where df.dish_id = #{id};")
     List<DishFlavor> select(Long id);
 
-    /**
-     * 根据菜品id查询口味
-     * @param id
-     * @return
-     */
-    @Select("select * from dish_flavor where dish_id = #{id}")
-    List<DishFlavor> selectDishById(Long id);
+
 }

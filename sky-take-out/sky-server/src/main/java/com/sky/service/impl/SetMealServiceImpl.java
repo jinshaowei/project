@@ -6,9 +6,11 @@ import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
 import com.sky.exception.BaseException;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetMealDishMapper;
 import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
@@ -17,11 +19,13 @@ import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -32,6 +36,12 @@ public class SetMealServiceImpl implements SetMealService{
 
     @Autowired
     private SetMealDishMapper setMealDishMapper;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 新增套餐
@@ -60,7 +70,8 @@ public class SetMealServiceImpl implements SetMealService{
             setmealDish.setSetmealId(setmeal.getId());
             setMealDishMapper.insertSetmealDish(setmealDish);
         });
-
+        //清除套餐缓存
+        eliminateCache("*");
 
     }
 
@@ -86,13 +97,25 @@ public class SetMealServiceImpl implements SetMealService{
      * 套餐起售-停售
      * @param status
      */
+    @Transactional
     @Override
-    public void updataStatusById(Integer status, Long id) {
+    public void updateStatusById(Integer status, Long id) {
+        //根据套餐id查询关联菜品
+        List<Long> dishIds = setMealDishMapper.selectSetMealDishByIds(id);
+        //根据菜品id查询未起售菜品
+        List<Dish> dishList = dishMapper.selectSetMealDishByIds(dishIds);
+        //判断集合是否为空
+        if (dishList.size() != 0){
+           throw  new BaseException(MessageConstant.SETMEAL_ENABLE_FAILED);
+        }
         setMealMapper.updateStatusByIds(status,id);
+
+        //清除套餐缓存
+        eliminateCache("*");
     }
 
     /**
-     * 批量输出套餐
+     * 批量删除套餐
      * @param ids
      */
     @Transactional
@@ -106,6 +129,10 @@ public class SetMealServiceImpl implements SetMealService{
         }
         //批量删除套餐
         setMealMapper.deleteByIds(ids);
+
+        //清除套餐缓存
+        eliminateCache("*");
+
     }
 
     /**
@@ -113,6 +140,7 @@ public class SetMealServiceImpl implements SetMealService{
      * @param id
      * @return
      */
+    @Transactional
     @Override
     public SetmealVO selectSetMalByIds(Long id) {
         //根据id查询返回结果
@@ -125,7 +153,7 @@ public class SetMealServiceImpl implements SetMealService{
     }
 
     /**
-     * 修改数据
+     * 修改套餐
      * @param setmealVO
      * @return
      */
@@ -150,6 +178,17 @@ public class SetMealServiceImpl implements SetMealService{
         });
         setMealDishMapper.insertSetmealDishById(setmealDishes);
 
+        //清除套餐缓存
+        eliminateCache("*");
     }
+
+    //清除缓存方法
+    private void eliminateCache(String cache) {
+        log.info("清除套餐缓存...");
+        Set keys = redisTemplate.keys("dish:cache:" + cache);
+
+        redisTemplate.delete(keys);
+    }
+
 
 }

@@ -9,17 +9,17 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.BaseException;
-import com.sky.mapper.CategoryMapper;
-import com.sky.mapper.DishFlavorMapper;
-import com.sky.mapper.DishMapper;
-import com.sky.mapper.SetMealDishMapper;
+import com.sky.mapper.*;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +27,9 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+@Slf4j
 @Service
 public class DishServiceImpl implements DishService {
 
@@ -43,9 +45,14 @@ public class DishServiceImpl implements DishService {
     @Autowired
     private SetMealDishMapper setMealDishMapper;
 
-    //分类表
+    //redis缓存
     @Autowired
-    private CategoryMapper categoryMapper;
+    private RedisTemplate redisTemplate;
+
+    //套餐表
+    @Autowired
+    private SetMealMapper setMealMapper;
+
 
     /**
      * 新增菜品
@@ -67,18 +74,26 @@ public class DishServiceImpl implements DishService {
         //返回携带了菜品id
         dishMapper.inst(dish);
 
+
         //保存菜品口味信息
         List<DishFlavor> flavors = dto.getFlavors();
-        flavors.forEach(dishFlavor1 ->{
-            //mapper已经返回了dish保存的主键
-            //对遍历的每一个菜品口味id赋值
-            dishFlavor1.setDishId(dish.getId());
-        });
+        if (flavors.size() != 0) {
+            flavors.forEach(dishFlavor1 -> {
+                //mapper已经返回了dish保存的主键
+                //对遍历的每一个菜品口味id赋值
+                dishFlavor1.setDishId(dish.getId());
+            });
 
-        //再根据id插入到口味表
-        dishFlavorMapper.insertBatch(flavors);
+            //再根据id插入到口味表
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
+        //清除菜品缓存
+        eliminateCache("*");
 
     }
+
+
 
     /**
      * 分页查询
@@ -126,13 +141,14 @@ public class DishServiceImpl implements DishService {
         dishMapper.deleteDishIds(ids);
 
         dishFlavorMapper.deleteByIds(ids);
-
-
+        //清除菜品缓存
+        eliminateCache("*");
     }
 
     /**
     * 查询数据回显
     * */
+    @Transactional
     @Override
     public DishVO selectId(Long id) {
 
@@ -162,13 +178,19 @@ public class DishServiceImpl implements DishService {
         //先删除口味信息，再添加
         dishFlavorMapper.deleteByIds(Collections.singletonList(dish.getId()));
 
-        //遍历口味列表，添加菜品id，再通过id进行添加口味信息
-        List<DishFlavor> flavors = dishVO.getFlavors();
-        flavors.forEach(dishFlavor -> {
-            dishFlavor.setDishId(dish.getId());
-        });
-        //添加口味信息
-        dishFlavorMapper.insertBatch(flavors);
+        //判断是否有修改的菜品口味
+        if (dishVO.getFlavors().size() != 0){
+            //遍历口味列表，添加菜品id，再通过id进行添加口味信息
+            List<DishFlavor> flavors = dishVO.getFlavors();
+            flavors.forEach(dishFlavor -> {
+                dishFlavor.setDishId(dish.getId());
+            });
+            //添加口味信息
+            dishFlavorMapper.insertBatch(flavors);
+        }
+
+        //清除菜品缓存
+        eliminateCache("*");
     }
 
     /**
@@ -178,6 +200,39 @@ public class DishServiceImpl implements DishService {
     public List selectCategoryDsihByIds(Long categoryId, String name) {
         List<Dish> list =  dishMapper.selectCategoryDishByIds(categoryId, name);
         return list;
+    }
+
+    /**
+     * 根据菜品id修改菜品状态
+     * @param status
+     * @param id
+     */
+    @Transactional
+    @Override
+    public void updeteByIds(Integer status, Long id) {
+        if (status == 0){
+            //根据菜品id查询相关套餐id
+            List<Long> setMealById =  setMealDishMapper.updateSetMealById(id);
+            //判断是否有菜品关联
+            if (!CollectionUtils.isEmpty(setMealById)){
+                //根据套餐id修改套餐状态
+                setMealMapper.updateSetMealByids(setMealById);
+            }
+        }
+
+        //根据菜品id修改菜品状态
+        dishMapper.updateByIds(status, id);
+
+        //清除菜品缓存
+        eliminateCache("*");
+
+    }
+
+    //清除缓存方法
+    private void eliminateCache(String cache) {
+        log.info("清除套餐缓存...");
+        Set keys = redisTemplate.keys("dish:cache:" + cache);
+        redisTemplate.delete(keys);
     }
 
 }

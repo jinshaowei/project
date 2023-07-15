@@ -1,5 +1,6 @@
 package com.sky.service;
 
+import com.sky.vo.DishVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +15,11 @@ public interface UserSetMealService {
      * @return
      */
     List SetMealById(Long categoryId);
+
+    /**
+     * 根据套餐id查询包含的菜品
+     * @param id
+     * @return
+     */
+    List<DishVO> selectSetMealById(Long id);
 }

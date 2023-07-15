@@ -53,4 +53,19 @@ public interface SetMealDishMapper {
      */
 //    @Insert("insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES (#{setmealId},#{dishId},#{name},#{price},#{copies});")
     void insertSetmealDishById(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据菜品id查询出相关套餐
+     * @param id
+     */
+    @Select("select sd.setmeal_id from setmeal_dish sd, setmeal s where sd.setmeal_id = s.id and sd.dish_id = #{id};")
+    List<Long> updateSetMealById(Long id);
+
+    /**
+     * 根据套餐id查询关联的菜品id
+     * @param id
+     * @return
+     */
+    @Select("select dish_id from setmeal_dish where setmeal_id = #{id}")
+    List<Long> selectSetMealDishByIds(Long id);
 }

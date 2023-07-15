@@ -68,4 +68,9 @@ public interface SetMealMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @AutoFill(OperationType.UPDATE)
     void updateSetMeal(Setmeal setmeal);
+
+    /*
+    * 修改套餐状态
+    * */
+    void updateSetMealByids(List<Long> setMealById);
 }

@@ -65,6 +65,7 @@ public class UserLoginTokenInterceptor implements HandlerInterceptor {
             BaseContext.setCurrentId(userId);
 
             //3、通过，放行
+            log.info("放行请求：{}", request.getRequestURI().toString());
             return true;
         } catch (Exception ex) {
             //4、不通过，响应401状态码

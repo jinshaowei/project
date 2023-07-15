@@ -42,7 +42,7 @@ public class SetMealController {
     @PostMapping("/status/{status}")
     public Result updateSetMealStatus(@PathVariable Integer status, Long id){
         log.info("套餐起售-停售：{},套餐id为：{}", status, id);
-        setMealService.updataStatusById(status,id);
+        setMealService.updateStatusById(status,id);
         return Result.success();
     }
 

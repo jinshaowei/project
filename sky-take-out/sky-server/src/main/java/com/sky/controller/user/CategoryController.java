@@ -1,10 +1,8 @@
 package com.sky.controller.user;
 
-import com.sky.entity.Category;
-import com.sky.result.PageResult;
+
 import com.sky.result.Result;
 import com.sky.service.UserCategoryService;
-import com.sky.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +20,7 @@ public class CategoryController {
     @Autowired
     private UserCategoryService userCategoryService;
 
-    @ApiOperation("根据分类id查询分类列表")
+    @ApiOperation("根据套餐类型查询分类列表")
     @GetMapping("/user/category/list")
     public Result<List> selectById(Integer type){
         log.info("根据type为：{} 查询分类", type);
