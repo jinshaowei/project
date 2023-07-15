@@ -185,7 +185,7 @@ public class SetMealServiceImpl implements SetMealService{
     //清除缓存方法
     private void eliminateCache(String cache) {
         log.info("清除套餐缓存...");
-        Set keys = redisTemplate.keys("dish:cache:" + cache);
+        Set keys = redisTemplate.keys("setmeal:" + cache);
 
         redisTemplate.delete(keys);
     }

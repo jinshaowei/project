@@ -43,6 +43,7 @@ public class UserDishServiceImpl implements UserDishService {
         //如果缓存没有菜品再查询数据库
          dishList = userDishMapper.DishById(categoryId);
 
+
         //再将数据库查询的菜品添加到redis缓存中
         redisTemplate.opsForValue().set(redisDishKey,dishList);
         log.info("查询数据库中的菜品...");

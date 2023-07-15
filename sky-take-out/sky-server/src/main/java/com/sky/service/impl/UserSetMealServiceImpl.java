@@ -28,7 +28,6 @@ public class UserSetMealServiceImpl implements UserSetMealService {
      * @param categoryId
      * @return
      */
-
     @Override
     public List SetMealById(Long categoryId) {
         String redisSetMealKey = "setmeal:" + categoryId;
@@ -41,10 +40,7 @@ public class UserSetMealServiceImpl implements UserSetMealService {
         }
 
         //没有则查询缓存套餐
-        Setmeal setmeal = new Setmeal();
-        setmeal.setCategoryId(categoryId);
-        setmeal.setStatus(1);
-        setMealList =  userSetMealMapper.selectSetmealById(setmeal);
+        setMealList =  userSetMealMapper.selectSetmealById(categoryId);
 
         //将数据添加到数据库中
         redisTemplate.opsForValue().set(redisSetMealKey,setMealList);

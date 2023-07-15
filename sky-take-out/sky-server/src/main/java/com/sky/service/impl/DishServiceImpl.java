@@ -230,7 +230,7 @@ public class DishServiceImpl implements DishService {
 
     //清除缓存方法
     private void eliminateCache(String cache) {
-        log.info("清除套餐缓存...");
+        log.info("清除菜品缓存...");
         Set keys = redisTemplate.keys("dish:cache:" + cache);
         redisTemplate.delete(keys);
     }
