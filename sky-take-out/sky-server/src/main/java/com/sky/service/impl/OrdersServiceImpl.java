@@ -1,18 +1,23 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.BaseException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.mapper.*;
+import com.sky.result.PageResult;
 import com.sky.service.OrdersService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,4 +183,35 @@ public class OrdersServiceImpl implements OrdersService {
         ordersMapper.update(orders);
     }
 
+    /**
+     * 查询历史订单
+     * @param pageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult selectPageOrders(OrdersPageQueryDTO pageQueryDTO) {
+        //获取页码和总记录数
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+        //获取用户id
+        Long userId = BaseContext.getCurrentId();
+
+        pageQueryDTO.setUserId(userId);
+        //分页查询订单
+        Page<Orders> page =  ordersMapper.select(pageQueryDTO);
+        //创建集合存储拼接的对象
+        List<OrderVO> voList = new ArrayList<>();
+        //遍历集合根据订单查询订单明细
+        if (page != null && page.getTotal() > 0){
+            for (Orders orders : page) {
+                //根据订单id查询菜品菜品明细
+                List<OrderDetail> orderVO = ordersDetailMapper.selectPageOrders(orders.getId());
+                OrderVO orderVO1 = new OrderVO();
+                BeanUtils.copyProperties(orders,orderVO1);
+                orderVO1.setOrderDetailList(orderVO);
+                voList.add(orderVO1);
+            }
+
+        }
+        return new PageResult(page.getTotal(),voList);
+    }
 }

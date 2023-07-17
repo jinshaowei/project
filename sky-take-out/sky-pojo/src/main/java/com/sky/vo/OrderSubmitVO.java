@@ -21,5 +21,6 @@ public class OrderSubmitVO implements Serializable {
     //订单金额
     private BigDecimal orderAmount;
     //下单时间
+
     private LocalDateTime orderTime;
 }
