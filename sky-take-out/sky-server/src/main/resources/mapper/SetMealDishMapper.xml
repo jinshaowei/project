@@ -6,6 +6,7 @@
 <!--配置mybatis 关联mapper接口-->
 <mapper namespace="com.sky.mapper.SetMealDishMapper">
 
+    <!--根据套餐id添加套餐关联菜品-->
     <insert id="insertSetmealDishById">
         insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES
         <foreach collection="setmealDishes" item="sds" separator=",">

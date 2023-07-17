@@ -49,4 +49,12 @@ public interface UserMapper {
      */
     @Options(useGeneratedKeys = true, keyProperty = "id")
     List<DishVO> DishById(DishVO dishVO);
+
+    /**
+     * 根据用户id查询用户信息
+     * @param userId
+     * @return
+     */
+    @Select("select id, openid, name, phone, sex, id_number, avatar, create_time from user where id = #{userId}")
+    User getById(Long userId);
 }

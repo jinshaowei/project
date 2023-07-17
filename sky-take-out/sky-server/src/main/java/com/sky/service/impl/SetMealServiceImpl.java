@@ -128,7 +128,7 @@ public class SetMealServiceImpl implements SetMealService{
         Long count = setMealMapper.selectByIds(ids);
         //判断是否有起售套餐
         if (count != 0){
-            throw new BaseException(MessageConstant.DISH_ON_SALE);
+            throw new BaseException(MessageConstant.SETMEAL_ON_SALE);
         }
         //批量删除套餐
         setMealMapper.deleteByIds(ids);

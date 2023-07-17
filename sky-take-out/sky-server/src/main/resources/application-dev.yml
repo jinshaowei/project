@@ -22,3 +22,17 @@ sky:
   wechat:
     appid: wx77e3e9b5d2d30681
     secret: db0bb93cc5c77d7bef2c46eb7ed657cc
+    #以下是微信支付的商户信息
+    #商户号（微信支付申请获取）
+    mchid: 0
+    #商户序列号
+    mch-serial-no: 0
+    #商户私钥
+    api-v3-key: 0
+    #下两条为微信认证后下载后的认证文件路径
+    we-chat-pay-cert-file-path: 0
+    private-key-file-path: 0
+    # 微信支付后回调商户的路径
+    notify-url: 0
+    # 回调退款的路径
+    refund-notify-url: 0
