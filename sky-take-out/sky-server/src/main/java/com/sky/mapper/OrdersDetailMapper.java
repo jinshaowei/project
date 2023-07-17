@@ -22,13 +22,12 @@ public interface OrdersDetailMapper {
 
 
     /**
-     * 查询历史订单
+     * 根据订单id查询订单明细表
      * @param id
      * @return
      */
     @Select("select * from order_detail where order_id = #{id}")
     List<OrderDetail> selectPageOrders(Long id);
-
 
 
 

@@ -56,7 +56,13 @@ public class OrdersController {
         log.info("查询历史订单");
         PageResult orderVOList = ordersService.selectPageOrders(pageQueryDTO);
         return Result.success(orderVOList);
+    }
 
+    @GetMapping("/orderDetail/{id}")
+    public Result<OrderVO> selectById(@PathVariable Long id){
+        log.info("根据订单id查询订单详情，id为：{}", id);
+        OrderVO orderVOList = ordersService.selectById(id);
+        return Result.success(orderVOList);
     }
 
 }
