@@ -32,7 +32,7 @@ public interface OrdersMapper {
      void update(Orders orders);
 
     /**
-     * 查询page
+     * 分页查询订单
      * @param pageQueryDTO
      * @return
      */
@@ -45,5 +45,18 @@ public interface OrdersMapper {
      */
     @Select("select * from orders where id = #{id}")
     OrderVO selectById(Long id);
+
+    /**
+     * 根据订单号查询订单
+     * @param orderNumber
+     * @return
+     */
+    @Select("select id from orders where number = #{orderNumber}")
+    Long selectNumber(String orderNumber);
+
+    /**
+     * 根据订单id修改订单状态
+     * @param id
+     */
 
 }

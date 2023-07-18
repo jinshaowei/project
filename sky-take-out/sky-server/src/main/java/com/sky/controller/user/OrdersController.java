@@ -1,8 +1,11 @@
 package com.sky.controller.user;
 
+import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
+import com.sky.mapper.appmapper.OrdersMapper;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.appservice.UserOrdersService;
@@ -15,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 
 @Slf4j
 @RestController("UserOrdersController")
@@ -24,6 +29,9 @@ public class OrdersController {
 
     @Autowired
     private UserOrdersService userOrdersService;
+
+    @Autowired
+    private OrdersMapper ordersMapper;
 
     @ApiOperation("用户下单")
     @PostMapping("/submit")
@@ -43,9 +51,21 @@ public class OrdersController {
     @ApiOperation("订单支付")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         log.info("订单支付：{}", ordersPaymentDTO);
-        OrderPaymentVO orderPaymentVO = userOrdersService.payment(ordersPaymentDTO);
-        log.info("生成预支付交易单：{}", orderPaymentVO);
-        return Result.success(orderPaymentVO);
+//        OrderPaymentVO orderPaymentVO = userOrdersService.payment(ordersPaymentDTO);
+//        log.info("生成预支付交易单：{}", orderPaymentVO);
+
+        Long oderId = ordersMapper.selectNumber(ordersPaymentDTO.getOrderNumber());
+
+        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+        Orders orders = Orders.builder()
+                .id(oderId)
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+
+        ordersMapper.update(orders);
+        return Result.success();
     }
 
 

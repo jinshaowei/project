@@ -233,15 +233,22 @@ public class UserOrdersServiceImpl implements UserOrdersService {
      */
     @Override
     public void update(Long id) {
-        //补全属性
-        Orders orders = new Orders();
-        orders.setId(id);
-        //修改订单状态
-        orders.setStatus(Orders.CANCELLED);
-        orders.setCancelTime(LocalDateTime.now());
-        ordersMapper.update(orders);
-
+        //判断当前订单是否是已完成
+        OrderVO orderVO = ordersMapper.selectById(id);
+        if (orderVO.getStatus() != Orders.COMPLETED){
+            //补全属性
+            Orders orders = new Orders();
+            orders.setId(id);
+            //修改订单状态
+            orders.setStatus(Orders.CANCELLED);
+            orders.setCancelTime(LocalDateTime.now());
+            ordersMapper.update(orders);
+        }
     }
+
+
+
+
 
     /**
      * 再来一单
@@ -261,4 +268,6 @@ public class UserOrdersServiceImpl implements UserOrdersService {
         });
 
     }
+
+
 }
