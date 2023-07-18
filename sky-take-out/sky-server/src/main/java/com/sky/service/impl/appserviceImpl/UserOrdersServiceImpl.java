@@ -233,8 +233,13 @@ public class UserOrdersServiceImpl implements UserOrdersService {
      */
     @Override
     public void update(Long id) {
-        Integer status = Orders.CANCELLED;
-        ordersMapper.updateById(status, id);
+        //补全属性
+        Orders orders = new Orders();
+        orders.setId(id);
+        //修改订单状态
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+        ordersMapper.update(orders);
 
     }
 

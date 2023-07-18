@@ -46,10 +46,4 @@ public interface OrdersMapper {
     @Select("select * from orders where id = #{id}")
     OrderVO selectById(Long id);
 
-    /**
-     * 根据订单id修改订单状态
-     * @param status id
-     */
-    @Update("update orders set status = #{status} where id = #{id}")
-    void updateById(Integer status, Long id);
 }
