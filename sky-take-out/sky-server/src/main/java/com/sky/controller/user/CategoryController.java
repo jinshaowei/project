@@ -2,7 +2,7 @@ package com.sky.controller.user;
 
 
 import com.sky.result.Result;
-import com.sky.service.UserCategoryService;
+import com.sky.service.appservice.UserCategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;

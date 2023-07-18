@@ -5,7 +5,7 @@ import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
-import com.sky.service.OrdersService;
+import com.sky.service.appservice.UserOrdersService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
@@ -15,22 +15,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Slf4j
-@RestController
+@RestController("UserOrdersController")
 @Api(tags = "C端-订单接口")
 @RequestMapping("user/order")
 public class OrdersController {
 
     @Autowired
-    private OrdersService ordersService;
+    private UserOrdersService userOrdersService;
 
     @ApiOperation("用户下单")
     @PostMapping("/submit")
     public Result<OrderSubmitVO> insertOrders(@RequestBody OrdersSubmitDTO submitDTO){
         log.info("用户下单中...");
-        OrderSubmitVO orderSubmitVO = ordersService.insert(submitDTO);
+        OrderSubmitVO orderSubmitVO = userOrdersService.insert(submitDTO);
         return Result.success(orderSubmitVO);
     }
 
@@ -44,7 +43,7 @@ public class OrdersController {
     @ApiOperation("订单支付")
     public Result<OrderPaymentVO> payment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) throws Exception {
         log.info("订单支付：{}", ordersPaymentDTO);
-        OrderPaymentVO orderPaymentVO = ordersService.payment(ordersPaymentDTO);
+        OrderPaymentVO orderPaymentVO = userOrdersService.payment(ordersPaymentDTO);
         log.info("生成预支付交易单：{}", orderPaymentVO);
         return Result.success(orderPaymentVO);
     }
@@ -54,7 +53,7 @@ public class OrdersController {
     @GetMapping("/historyOrders")
     public Result<PageResult> historyOrders(OrdersPageQueryDTO pageQueryDTO){
         log.info("查询历史订单");
-        PageResult orderVOList = ordersService.selectPageOrders(pageQueryDTO);
+        PageResult orderVOList = userOrdersService.selectPageOrders(pageQueryDTO);
         return Result.success(orderVOList);
     }
 
@@ -62,7 +61,7 @@ public class OrdersController {
     @GetMapping("/orderDetail/{id}")
     public Result<OrderVO> selectById(@PathVariable Long id){
         log.info("根据订单id查询订单详情，id为：{}", id);
-        OrderVO orderVOList = ordersService.selectById(id);
+        OrderVO orderVOList = userOrdersService.selectById(id);
         return Result.success(orderVOList);
     }
 
@@ -70,7 +69,7 @@ public class OrdersController {
     @PutMapping("/cancel/{id}")
     public Result update(@PathVariable Long id){
         log.info("取消订单id为：{}", id);
-        ordersService.update(id);
+        userOrdersService.update(id);
         return Result.success();
     }
 
@@ -79,7 +78,7 @@ public class OrdersController {
     @PostMapping("/repetition/{id}")
     public Result inserts(@PathVariable Long id){
         log.info("根据订单id再来一单：{}", id);
-        ordersService.inserts(id);
+        userOrdersService.inserts(id);
         return Result.success();
     }
 

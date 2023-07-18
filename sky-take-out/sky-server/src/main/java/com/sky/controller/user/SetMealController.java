@@ -1,7 +1,7 @@
 package com.sky.controller.user;
 
 import com.sky.result.Result;
-import com.sky.service.UserSetMealService;
+import com.sky.service.appservice.UserSetMealService;
 import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

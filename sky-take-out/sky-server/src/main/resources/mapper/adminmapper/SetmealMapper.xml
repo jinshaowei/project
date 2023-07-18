@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.mapper.adminmapper.SetMealMapper">
+    <!--修改套餐-->
+    <update id="updateSetMeal">
+        update setmeal
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--根据id修改套餐-->
+    <update id="updateSetMealByids">
+        update setmeal set status = 0 where id in
+        <foreach collection="setMealById" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!--根据id批量删除套餐-->
+    <delete id="deleteByIds">
+        delete from setmeal where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <!--分页查询-->
+    <select id="selectSetmealPage" resultType="com.sky.vo.SetmealVO">
+        select s.*, c.name 'categoryName' from setmeal s, category c
+        <where>
+            s.category_id = c.id
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+            <if test="name != null and name != ''">
+                and s.name like concat('%', #{name}, '%')
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+        </where>
+        order by s.update_time desc
+    </select>
+
+    <!--根据id统计起售套餐数量-->
+    <select id="selectByIds" resultType="java.lang.Long">
+        select count(id) from setmeal where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        and status = 1
+    </select>
+
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--配置mybatis 关联mapper接口-->
+<mapper namespace="com.sky.mapper.adminmapper.SetMealDishMapper">
+
+    <!--根据套餐id添加套餐关联菜品-->
+    <insert id="insertSetmealDishById">
+        insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES
+        <foreach collection="setmealDishes" item="sds" separator=",">
+            (#{sds.setmealId}, #{sds.dishId}, #{sds.name}, #{sds.price}, #{sds.copies})
+        </foreach>
+
+    </insert>
+
+
+    <!--根据菜品id查询菜品套餐表是否关联套餐id-->
+    <select id="countSetmealIdsByDishIds" resultType="java.lang.Long">
+        select setmeal_id from setmeal_dish
+        where dish_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>
