@@ -9,8 +9,6 @@ import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface OrdersService {
 
@@ -53,4 +51,10 @@ public interface OrdersService {
      * @param id
      */
     void update(Long id);
+
+    /**
+     * 再来一单
+     * @param id
+     */
+    void inserts(Long id);
 }

@@ -50,7 +50,7 @@ public interface OrdersMapper {
 
     /**
      * 根据订单id修改订单状态
-     * @param orders
+     * @param status id
      */
     @Update("update orders set status = #{status} where id = #{id}")
     void updateById(Integer status, Long id);

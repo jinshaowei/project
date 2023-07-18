@@ -238,4 +238,23 @@ public class OrdersServiceImpl implements OrdersService {
         ordersMapper.updateById(status, id);
 
     }
+
+    /**
+     * 再来一单
+     * @param id
+     */
+    @Override
+    public void inserts(Long id) {
+        //根据订单id查询订单明细
+        List<OrderDetail> orderDetailList = ordersDetailMapper.selectPageOrders(id);
+        orderDetailList.forEach(orderDetail -> {
+            //将订单明细表的菜品添加到购物车
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(orderDetail,shoppingCart);
+            //补全购物车用户id
+            shoppingCart.setUserId(BaseContext.getCurrentId());
+            userShoppingCartMapper.insert(shoppingCart);
+        });
+
+    }
 }
