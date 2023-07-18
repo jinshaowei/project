@@ -47,4 +47,10 @@ public interface OrdersService {
      * @return
      */
     OrderVO selectById(Long id);
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    void update(Long id);
 }

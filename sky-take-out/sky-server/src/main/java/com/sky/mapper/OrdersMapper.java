@@ -6,6 +6,7 @@ import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -46,4 +47,11 @@ public interface OrdersMapper {
      */
     @Select("select * from orders where id = #{id}")
     OrderVO selectById(Long id);
+
+    /**
+     * 根据订单id修改订单状态
+     * @param orders
+     */
+    @Update("update orders set status = #{status} where id = #{id}")
+    void updateById(Integer status, Long id);
 }

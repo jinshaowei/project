@@ -227,4 +227,15 @@ public class OrdersServiceImpl implements OrdersService {
         orderVO.setOrderDetailList(orderDetailList);
         return orderVO;
     }
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    @Override
+    public void update(Long id) {
+        Integer status = Orders.CANCELLED;
+        ordersMapper.updateById(status, id);
+
+    }
 }
