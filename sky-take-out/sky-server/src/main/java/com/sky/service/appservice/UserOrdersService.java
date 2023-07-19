@@ -17,7 +17,7 @@ public interface UserOrdersService {
      * @param submitDTO
      * @return
      */
-    OrderSubmitVO insert(OrdersSubmitDTO submitDTO);
+    OrderSubmitVO insert(OrdersSubmitDTO submitDTO) throws Exception;
 
     /**
      * 订单支付

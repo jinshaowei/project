@@ -8,6 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface OrdersMapper {
 
@@ -55,8 +58,13 @@ public interface OrdersMapper {
     Long selectNumber(String orderNumber);
 
     /**
-     * 根据订单id修改订单状态
-     * @param id
+     * 定时任务
+     * @param paid
+     * @param localDateTime
+     * @return
      */
+    @Select("select * from orders where status = #{paid} and order_time < #{localDateTime}")
+    List<Orders> selectCancelById(Integer paid, LocalDateTime localDateTime);
+
 
 }

@@ -18,6 +18,7 @@ import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -51,6 +54,9 @@ public class UserOrdersServiceImpl implements UserOrdersService {
     @Autowired
     private WeChatPayUtil weChatPayUtil;
 
+    @Autowired
+    private WebSocketServer webSocketServer;
+
 
 
     /**
@@ -60,7 +66,7 @@ public class UserOrdersServiceImpl implements UserOrdersService {
      */
     @Transactional
     @Override
-    public OrderSubmitVO insert(OrdersSubmitDTO submitDTO) {
+    public OrderSubmitVO insert(OrdersSubmitDTO submitDTO) throws Exception {
         //查询判断用户下单是否有地址
         AddressBook addressBook = addressBookMapper.getById(submitDTO.getAddressBookId());
         if (addressBook == null){
@@ -245,9 +251,6 @@ public class UserOrdersServiceImpl implements UserOrdersService {
             ordersMapper.update(orders);
         }
     }
-
-
-
 
 
     /**
