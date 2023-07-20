@@ -79,4 +79,26 @@ public interface OrdersMapper {
      */
     @Select("select sum(amount) from orders where status = #{completed} and order_time between #{beginTime} and #{endTime}")
     String selectLocalDate(Integer completed, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 指定日期范围用户总数
+     * @return
+     */
+    @Select("select count(id) from  user where create_time between #{beginTime} and #{endTime}")
+    String selectCountUser(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计全部用户
+     * @return
+     */
+    @Select("select count(id) from user;")
+    Integer CountAllUser();
+
+    /**
+     * 查询用户开始时间之前的总数量
+     * @param begin
+     * @return
+     */
+    @Select("select count(id) from user where create_time < #{begin};")
+    Integer selectBeginTime(LocalDate begin);
 }

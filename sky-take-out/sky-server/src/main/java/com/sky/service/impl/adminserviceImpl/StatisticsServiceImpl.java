@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -95,14 +96,53 @@ public class StatisticsServiceImpl implements StatisticsService {
      */
     @Override
     public UserReportVO userStatistics(LocalDate begin, LocalDate end) {
-        List<LocalDate> localDateList = (List<LocalDate>) begin.datesUntil(end);
-        localDateList.add(end);
-        for (LocalDate localDate : localDateList) {
+        //获取到指定时间内的每一天时间
+        List<LocalDate> localDates = begin.datesUntil(end).collect(Collectors.toList());
+
+        //含头不含尾
+        localDates.add(end);
+
+        //将日期转换成String
+        String strLocalDate = StringUtils.join(localDates);
+        System.out.println(strLocalDate);
+
+        //拼接字符串
+        StringJoiner sj = new StringJoiner(",");
+        StringJoiner userAllId = new StringJoiner(",");
+
+        //获取用户开始日期之前的总用户数量
+        Integer strUser = ordersMapper.selectBeginTime(begin);
+
+        //遍历时间集合
+        for (LocalDate localDate : localDates) {
+            //获取日期的开始时间
+            LocalDateTime beginTime = LocalDateTime.of(localDate, LocalTime.MIN);
+            //获取日期的结束时间
+            LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
+            //查询出当前日期用户总数
+            String userId = ordersMapper.selectCountUser(beginTime, endTime);
+            int countUser = Integer.parseInt(userId);
+            userAllId.add((countUser + strUser) + "");
+            sj.add(userId);
 
         }
 
 
-        return null;
+
+        //获取到的数据封装到实体类中
+        UserReportVO userReportVO = new UserReportVO();
+        //日期
+        userReportVO.setDateList(strLocalDate);
+        //新增用户
+        String number = sj.toString();
+        System.out.println(number);
+        userReportVO.setNewUserList(number);
+        //用户总数
+        String sum = userAllId.toString();
+        System.out.println(sum);
+        userReportVO.setTotalUserList(sum);
+
+        return userReportVO;
     }
 
 
