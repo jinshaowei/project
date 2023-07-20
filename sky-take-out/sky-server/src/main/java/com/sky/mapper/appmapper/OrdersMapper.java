@@ -4,10 +4,13 @@ import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
+import com.sky.vo.TurnoverReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -67,4 +70,13 @@ public interface OrdersMapper {
     List<Orders> selectCancelById(Integer paid, LocalDateTime localDateTime);
 
 
+    /**
+     * 营业额统计
+     * @param completed
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    @Select("select sum(amount) from orders where status = #{completed} and order_time between #{beginTime} and #{endTime}")
+    String selectLocalDate(Integer completed, LocalDateTime beginTime, LocalDateTime endTime);
 }
