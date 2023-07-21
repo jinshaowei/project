@@ -68,5 +68,28 @@
         </where>
         order by order_time desc
     </select>
+    <!--根据订单id查询出菜品名字-->
+    <select id="selectOrderDetail" resultType="java.lang.String">
+        select name from order_detail
+        <where>
+            order_id in
+            <foreach collection="orderId" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+        group by name order by count(dish_id) desc;
+    </select>
+
+    <!--根据订单查询出菜品次数-->
+    <select id="selectOrderDetailId" resultType="java.lang.String">
+        select count(dish_id) from order_detail
+        <where>
+            order_id in
+            <foreach collection="orderId" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+        </where>
+        group by name order by count(dish_id) desc;
+    </select>
 
 </mapper>
