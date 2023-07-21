@@ -72,4 +72,12 @@ public interface DishMapper {
      * @return
      */
     List<Dish> selectSetMealDishByIds(List<Long> dishIds);
+
+    /**
+     * 查询统计起售菜品数量
+     * @param unPaid
+     * @return
+     */
+    @Select("select count(id) from dish where status = #{unPaid};")
+    Integer countDishStatus(Integer unPaid);
 }

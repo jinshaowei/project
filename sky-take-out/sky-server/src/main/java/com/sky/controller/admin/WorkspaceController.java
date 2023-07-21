@@ -3,6 +3,7 @@ package com.sky.controller.admin;
 import com.sky.result.Result;
 import com.sky.service.adminservice.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.SetmealOverViewVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +36,15 @@ public class WorkspaceController {
         log.info("查询套餐");
         SetmealOverViewVO setmeal =workspaceService.selectSetmeals();
         return Result.success(setmeal);
+    }
+
+
+    @ApiOperation("查询菜品总览")
+    @GetMapping("/overviewDishes")
+    public Result<DishOverViewVO> overviewDishes(){
+        log.info("查询菜品总览");
+        DishOverViewVO dishOverViewVO = workspaceService.countDishStatus();
+        return Result.success(dishOverViewVO);
     }
 
 
