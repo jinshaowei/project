@@ -1,14 +1,14 @@
 package com.sky.service.impl.adminserviceImpl;
 
 import com.sky.entity.Orders;
+import com.sky.mapper.adminmapper.SetMealMapper;
 import com.sky.mapper.appmapper.OrdersMapper;
 import com.sky.mapper.appmapper.UserMapper;
 import com.sky.service.adminservice.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
-import com.sky.vo.OrderReportVO;
+import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,8 +20,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private OrdersMapper ordersMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
+    private SetMealMapper setMealMapper;
 
     /**
      * 查询今日运营数据
@@ -63,16 +62,28 @@ public class WorkspaceServiceImpl implements WorkspaceService {
             businessDataVO.setTurnover(0.0);
         }
 
-
-
         //有效订单数
         businessDataVO.setValidOrderCount(Integer.parseInt(doneOrder));
         //订单完成率
         businessDataVO.setOrderCompletionRate(doneOrders);
-
         //新增用户数
         businessDataVO.setNewUsers(Integer.parseInt(user));
 
         return businessDataVO;
     }
+
+    /**
+     * 查询套装总览
+     * @return
+     */
+    @Override
+    public SetmealOverViewVO selectSetmeals() {
+        //查询统计起售套餐数量
+        Integer countOnSale = setMealMapper.selectStatus(Orders.PAID);
+        //查询统计停售套餐数量
+        Integer countStatus = setMealMapper.selectStatus(Orders.UN_PAID);
+        return new SetmealOverViewVO(countOnSale,countStatus);
+    }
+
+
 }

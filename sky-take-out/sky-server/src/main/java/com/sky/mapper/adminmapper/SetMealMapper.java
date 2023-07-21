@@ -73,4 +73,12 @@ public interface SetMealMapper {
     * 修改套餐状态
     * */
     void updateSetMealByids(List<Long> setMealById);
+
+    /**
+     * 查询套餐停售数量
+     * @param unPaid
+     * @return
+     */
+    @Select("select count(id) from setmeal where status = #{unPaid};")
+    Integer selectStatus(Integer unPaid);
 }
