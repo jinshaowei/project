@@ -117,8 +117,8 @@ public interface OrdersMapper {
      *
      * @return
      */
-    @Select("select count(id) from orders")
-    Integer selectSumOrder();
+    @Select("select count(id) from orders where order_time between #{beginDate} and #{endDate}")
+    Integer selectSumOrder(LocalDateTime beginDate, LocalDateTime endDate);
 
 
     /**
@@ -126,8 +126,8 @@ public interface OrdersMapper {
      *
      * @return
      */
-    @Select("select count(id) from orders where status = #{completed}")
-    Integer selectValidOrder(Integer completed);
+    @Select("select count(id) from orders where status = #{completed} and order_time between #{beginDate} and #{endDate}")
+    Integer selectValidOrder(Integer completed,LocalDateTime beginDate, LocalDateTime endDate);
 
     /**
      * 统计每日有效订单
@@ -136,7 +136,7 @@ public interface OrdersMapper {
      * @param endTime
      * @return
      */
-    @Select("select COUNT(id) from orders where order_time between #{beginTime} and #{endTime}")
+    @Select("select COUNT(id) from orders where status = #{completed} and order_time between #{beginTime} and #{endTime}")
     String selectOrdersStatistics(Integer completed, LocalDateTime beginTime, LocalDateTime endTime);
 
     /**

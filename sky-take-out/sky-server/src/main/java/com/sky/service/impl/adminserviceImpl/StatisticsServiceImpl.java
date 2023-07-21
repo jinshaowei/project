@@ -119,7 +119,8 @@ public class StatisticsServiceImpl implements StatisticsService {
             //查询出当前日期用户总数
             String userId = ordersMapper.selectCountUser(beginTime, endTime);
             int countUser = Integer.parseInt(userId);
-            userAllId.add((countUser + strUser) + "");
+            strUser = strUser + countUser;
+            userAllId.add(strUser + "");
             sj.add(userId);
 
         }
@@ -149,6 +150,13 @@ public class StatisticsServiceImpl implements StatisticsService {
      */
     @Override
     public OrderReportVO ordersStatistics(LocalDate begin, LocalDate end) {
+        //封装到实体类
+        OrderReportVO orderReportVO = new OrderReportVO();
+        //指定时间的获取开始和结束时间
+        LocalDateTime beginDate = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endDate = LocalDateTime.of(end, LocalTime.MAX);
+
+
         //获取时间
         List<LocalDate> localDates = getLocalDates(begin, end);
         //转换时间
@@ -163,7 +171,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             LocalDateTime endTime = LocalDateTime.of(localDate, LocalTime.MAX);
             //每日订单
             String order = ordersMapper.selectOrderAll(beginTime, endTime);
-            //有效订单
+            //每日有效订单
             String validOrder = ordersMapper.selectOrdersStatistics(Orders.COMPLETED, beginTime, endTime);
             //拼接每日有效订单
             validOrders.add(validOrder);
@@ -172,15 +180,18 @@ public class StatisticsServiceImpl implements StatisticsService {
         }
 
         //有效订单数
-        Integer sumOrderId = ordersMapper.selectValidOrder(Orders.COMPLETED);
+        Integer sumOrderId = ordersMapper.selectValidOrder(Orders.COMPLETED,beginDate,endDate);
 
         //订单总数
-        Integer sumOrderIds = ordersMapper.selectSumOrder();
-        //获取订单完成率
-        Double orderId = ((sumOrderId * 1.0) / (sumOrderIds * 1.0));
+        Integer sumOrderIds = ordersMapper.selectSumOrder(beginDate,endDate);
 
-        //封装到实体类
-        OrderReportVO orderReportVO = new OrderReportVO();
+            //获取订单完成率
+            Double orderId = ((sumOrderId * 1.0) / (sumOrderIds * 1.0));
+            //订单完成率
+            orderReportVO.setOrderCompletionRate(orderId);
+
+
+
         //日期
         orderReportVO.setDateList(StrLocalDates);
         //每日订单数
@@ -191,8 +202,7 @@ public class StatisticsServiceImpl implements StatisticsService {
         orderReportVO.setTotalOrderCount(sumOrderIds);
         //有效订单数
         orderReportVO.setValidOrderCount(sumOrderId);
-        //订单完成率
-        orderReportVO.setOrderCompletionRate(orderId);
+
 
         return orderReportVO;
     }
