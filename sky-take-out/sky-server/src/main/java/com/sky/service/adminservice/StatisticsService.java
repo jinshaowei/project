@@ -43,4 +43,7 @@ public interface StatisticsService {
      */
 
     SalesTop10ReportVO selectTop(LocalDate begin, LocalDate end);
+
+    //导出运营数据报表
+    void deriveExcel();
 }

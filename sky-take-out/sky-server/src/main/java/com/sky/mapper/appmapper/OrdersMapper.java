@@ -173,4 +173,19 @@ public interface OrdersMapper {
      * @return
      */
     List<String> selectOrderDetailId(List<Integer> orderId);
+
+    /**
+     * 查询统计订单状态数量
+     * @param refund
+     * @return
+     */
+    @Select("select count(id) from orders where status = #{refund};")
+    Integer selectOrderStatus(Integer refund);
+
+    /**
+     * 查询全部订单
+     * @return
+     */
+    @Select("select count(id) from orders;")
+    Integer selectOrder();
 }

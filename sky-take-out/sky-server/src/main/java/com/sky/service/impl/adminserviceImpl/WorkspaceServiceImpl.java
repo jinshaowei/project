@@ -7,6 +7,7 @@ import com.sky.mapper.appmapper.OrdersMapper;
 import com.sky.service.adminservice.WorkspaceService;
 import com.sky.vo.BusinessDataVO;
 import com.sky.vo.DishOverViewVO;
+import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,26 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 
         return new DishOverViewVO(sold,discontinued);
+    }
+
+    /**
+     * 查询订单管理数据
+     * @return
+     */
+    @Override
+    public OrderOverViewVO countOrder() {
+        //待接单数量
+        Integer waitingOrders = ordersMapper.selectOrderStatus(Orders.REFUND);
+        //待派送数量
+        Integer deliveredOrders = ordersMapper.selectOrderStatus(Orders.CONFIRMED);
+        //已完成数量
+        Integer completedOrders = ordersMapper.selectOrderStatus(Orders.COMPLETED);
+        //已取消数量
+        Integer cancelledOrders = ordersMapper.selectOrderStatus(Orders.CANCELLED);
+        //全部订单
+        Integer allOrders = ordersMapper.selectOrder();
+
+        return new OrderOverViewVO(waitingOrders,deliveredOrders,completedOrders,cancelledOrders,allOrders);
     }
 
 

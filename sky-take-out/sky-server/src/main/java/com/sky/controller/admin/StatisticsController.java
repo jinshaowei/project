@@ -67,4 +67,11 @@ public class StatisticsController {
     }
 
 
+    @ApiOperation("运营数据导出")
+    @GetMapping("/export")
+    public void exportData(){
+        statisticsService.deriveExcel();
+    }
+
+
 }

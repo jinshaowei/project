@@ -2,6 +2,7 @@ package com.sky.service.adminservice;
 
 import com.sky.vo.BusinessDataVO;
 import com.sky.vo.DishOverViewVO;
+import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.SetmealOverViewVO;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +25,10 @@ public interface WorkspaceService {
      * @return
      */
     DishOverViewVO countDishStatus();
+
+    /**
+     * 查询订单管理数据
+     * @return
+     */
+    OrderOverViewVO countOrder();
 }
