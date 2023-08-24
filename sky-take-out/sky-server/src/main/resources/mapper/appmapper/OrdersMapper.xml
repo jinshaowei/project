@@ -77,19 +77,19 @@
                 #{id}
             </foreach>
         </where>
-        group by name order by count(dish_id) desc;
+        group by name order by sum(number) desc;
     </select>
 
     <!--根据订单查询出菜品次数-->
     <select id="selectOrderDetailId" resultType="java.lang.String">
-        select count(dish_id) from order_detail
+        select sum(number) from order_detail
         <where>
             order_id in
             <foreach collection="orderId" item="id" separator="," open="(" close=")">
                 #{id}
             </foreach>
         </where>
-        group by name order by count(dish_id) desc;
+        group by name order by sum(number) desc;
     </select>
 
 </mapper>

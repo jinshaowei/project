@@ -13,6 +13,12 @@ sky:
     database: 10
     password: 123456
 
+  # 百度地图
+  shop:
+    address: 北京市海淀区上地十街10号
+  baidu:
+     ak: C4BcvrImlLAQ1krRHPWrfnxgXFeK6EQ7
+
   alioss:
     endpoint: oss-cn-hangzhou.aliyuncs.com
     access-key-id: LTAI5tEurNXahGwZQ2bPZVcr
